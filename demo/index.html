@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="tiktok-developers-site-verification" content="ckZyZmXrduxo90fMxjR9UT4oPng8qymH">
+  <title>Operator tool - Jandola Press Club</title>
+  <style>
+    body { font-family: sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #111; }
+    nav a { margin-right: 1rem; }
+    label { display: block; margin: 0.8rem 0 0.3rem; font-weight: 600; }
+    input, button { font-size: 1rem; padding: 0.6rem; width: 100%; box-sizing: border-box; }
+    button { margin-top: 0.8rem; }
+    .box { border: 1px solid #ccc; padding: 1rem; margin: 1rem 0; }
+    .ok { color: #0a6; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../">Home</a>
+    <a href="./">Operator tool</a>
+    <a href="../privacy-policy/">Privacy Policy</a>
+    <a href="../terms-of-service/">Terms of Service</a>
+  </nav>
+  <h1>Jandola Press Club operator tool</h1>
+  <p>Internal tool. Login Kit connects our TikTok account. Content Posting API Direct Post publishes queued videos. Scopes: user.info.basic, video.publish.</p>
+
+  <div class="box">
+    <h2>1. Login Kit</h2>
+    <p>Connect the club TikTok account. This requests <strong>user.info.basic</strong> and <strong>video.publish</strong>.</p>
+    <label for="client_key">TikTok Client Key</label>
+    <input id="client_key" placeholder="Paste Client key from TikTok app Credentials">
+    <button type="button" id="connect">Connect TikTok with Login Kit</button>
+    <p id="login_status"></p>
+  </div>
+
+  <div class="box">
+    <h2>2. Content Posting API Direct Post</h2>
+    <p>Published jobs can also post to the authorized TikTok account.</p>
+    <label for="video_url">Video link</label>
+    <input id="video_url" placeholder="https://example.com/clip.mp4">
+    <label for="title">Title</label>
+    <input id="title" placeholder="Title on TikTok">
+    <label><input type="checkbox" id="tiktok" style="width:auto"> Also post to TikTok (video.publish)</label>
+    <button type="button" id="queue">Queue Published video</button>
+    <p id="post_status"></p>
+  </div>
+  <script>
+    var redirect = "https://junaid-programmer.github.io/jandola-press-club/demo/callback.html";
+    var keyInput = document.getElementById("client_key");
+    keyInput.value = localStorage.getItem("tt_client_key") || "";
+    if (localStorage.getItem("tt_connected") === "1") {
+      document.getElementById("login_status").innerHTML =
+        '<span class="ok">TikTok connected with Login Kit.</span> Scopes granted: user.info.basic, video.publish.';
+    }
+    document.getElementById("connect").onclick = function () {
+      var key = keyInput.value.trim();
+      if (!key) { alert("Paste Client key first"); return; }
+      localStorage.setItem("tt_client_key", key);
+      var url = "https://www.tiktok.com/v2/auth/authorize/"
+        + "?client_key=" + encodeURIComponent(key)
+        + "&scope=" + encodeURIComponent("user.info.basic,video.publish")
+        + "&response_type=code"
+        + "&redirect_uri=" + encodeURIComponent(redirect)
+        + "&state=demo";
+      window.location.href = url;
+    };
+    document.getElementById("queue").onclick = function () {
+      var connected = localStorage.getItem("tt_connected") === "1";
+      var tiktok = document.getElementById("tiktok").checked;
+      if (!connected) {
+        document.getElementById("post_status").textContent = "Connect TikTok with Login Kit first.";
+        return;
+      }
+      if (!tiktok) {
+        document.getElementById("post_status").textContent = "Tick Also post to TikTok to demo Content Posting API.";
+        return;
+      }
+      document.getElementById("post_status").innerHTML =
+        '<span class="ok">Sandbox Direct Post started.</span> Content Posting API uses video.publish on the authorized account.';
+    };
+  </script>
+</body>
+</html>

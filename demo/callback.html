@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="tiktok-developers-site-verification" content="ckZyZmXrduxo90fMxjR9UT4oPng8qymH">
+  <title>TikTok connected - Jandola Press Club</title>
+  <style>
+    body { font-family: sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #111; }
+    nav a { margin-right: 1rem; }
+    .ok { color: #0a6; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../">Home</a>
+    <a href="./">Operator tool</a>
+  </nav>
+  <h1>Login Kit callback</h1>
+  <p id="msg">Checking TikTok authorization...</p>
+  <p><a href="./">Back to operator tool</a></p>
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get("code");
+    var scopes = params.get("scopes") || params.get("scope") || "user.info.basic,video.publish";
+    var msg = document.getElementById("msg");
+    if (code) {
+      localStorage.setItem("tt_connected", "1");
+      msg.innerHTML = '<span class="ok">TikTok Login Kit succeeded.</span> Authorized scopes: ' + scopes + '. Content Posting API can now Direct Post with video.publish.';
+    } else {
+      msg.textContent = "No authorization code. Go back and tap Connect TikTok.";
+    }
+  </script>
+</body>
+</html>
