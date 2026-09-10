@@ -26,7 +26,7 @@
     var msg = document.getElementById("msg");
     if (code) {
       localStorage.setItem("tt_connected", "1");
-      msg.innerHTML = '<span class="ok">TikTok Login Kit succeeded.</span> Authorized scopes: ' + scopes + '. Content Posting API can now Direct Post with video.publish.';
+      msg.innerHTML = '<span class="ok">TikTok Login Kit succeeded.</span> Authorized scopes: ' + scopes + '. Copy only the code value from the address bar (the part after code= and before &). Paste it into the secrets form within one minute. Do not paste it into chat.';
     } else {
       msg.textContent = "No authorization code. Go back and tap Connect TikTok.";
     }
